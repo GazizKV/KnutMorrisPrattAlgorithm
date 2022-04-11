@@ -1,0 +1,65 @@
+package knut.morris.prat;
+
+
+import java.util.Arrays;
+
+/**
+ * @author ValitovGaziz
+ * date     11.04.2022
+ * @project Poligon
+ */
+
+public class KnutMorrisPratt {
+    public static void main(String[] args) {
+        String string = "abcabeabcabcabd";
+        String subString = "abcabd";
+
+        System.out.println(Arrays.toString(findPrefSuf(subString)));
+
+        System.out.println(findSubstringInclusion(string, subString));
+
+    }
+
+    public static boolean findSubstringInclusion(String string, String subString) {
+        int[] arrayOfPrefSuf = findPrefSuf(subString);
+        int stringIndex = 0;
+        int subIndex = 0;
+        while (stringIndex != string.length()) {
+            if (string.charAt(stringIndex) == subString.charAt(subIndex)) {
+                stringIndex++;
+                subIndex++;
+                if (subIndex == subString.length()) {
+                    return true;
+                }
+            } else if (subIndex == 0) {
+                stringIndex++;
+            } else {
+                subIndex = arrayOfPrefSuf[subIndex - 1];
+            }
+        }
+        return false;
+    }
+
+    private static int[] findPrefSuf(String subString) {
+        int[] result = new int[subString.length()];
+        result[0] = 0;
+        int j = 0;
+        int i = 1;
+        while (i < subString.length()) {
+            if (subString.charAt(i) == subString.charAt(j)) {
+                result[i] = j + 1;
+                i++;
+                j++;
+            } else {
+                if (j == 0) {
+                    result[i] = 0;
+                    i++;
+                } else {
+                    j = result[j - 1];
+                }
+            }
+        }
+        return result;
+    }
+
+}
